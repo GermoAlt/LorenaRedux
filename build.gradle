@@ -8,12 +8,6 @@ plugins {
 group = 'dev.altairac'
 version = '0.0.1-SNAPSHOT'
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(24)
-	}
-}
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
