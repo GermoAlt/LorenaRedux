@@ -28,7 +28,10 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getContentRaw().contains("@everyone")) handleAtEveryone(event);
-        if (containsLorenaName(event.getMessage().getContentRaw())) handleAtEveryone(event);
+        if (containsLorenaName(event.getMessage().getContentRaw())) handleLoreEvent(event);
+    }
+
+    private void handleLoreEvent(MessageReceivedEvent event) {
     }
 
     private void handleAtEveryone(MessageReceivedEvent event) {
