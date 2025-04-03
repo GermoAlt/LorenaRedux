@@ -28,10 +28,10 @@ public class ReactionListener extends ListenerAdapter {
                 .filter(t -> t.getEmoji().equals(event.getEmoji().getAsReactionCode()))
                 .findFirst();
         if (threshold.isEmpty()) return;
-        reactionService.handleReaction(threshold.get(), event);
+        if (thresholdMet(event, threshold.get())) reactionService.handleReaction(threshold.get(), event);
     }
 
-    private boolean evaluateThresholdMet(MessageReactionAddEvent event, ServerThreshold threshold) {
+    private boolean thresholdMet(MessageReactionAddEvent event, ServerThreshold threshold) {
         Server server = serverRepository.findById(event.getGuild().getIdLong()).orElseThrow();
         return event.getReaction().getCount() >= server.getServerThresholds().get(threshold);
     }

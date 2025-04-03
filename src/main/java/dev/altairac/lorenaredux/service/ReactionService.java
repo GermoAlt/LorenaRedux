@@ -27,7 +27,7 @@ public class ReactionService {
         Optional<Server> server = serverService.findServerById(event.getGuild().getIdLong());
         if(server.isEmpty()) return;
         switch(threshold){
-            case LORE_THRESHOLD -> loreService.handleLore(event, server.get());
+            case LORE_THRESHOLD -> loreService.addLore(event, server.get());
             case GULAG_THRESHOLD -> sendUserToGulag(event, server.get());
             case GULAG_REMOVAL_THRESHOLD -> removeUserFromGulag(event, server.get());
         }

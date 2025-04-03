@@ -3,6 +3,7 @@ package dev.altairac.lorenaredux.listener;
 import dev.altairac.lorenaredux.enums.ChannelType;
 import dev.altairac.lorenaredux.enums.ServerThreshold;
 import dev.altairac.lorenaredux.enums.SlashCommand;
+import dev.altairac.lorenaredux.enums.ConversionUnit;
 import dev.altairac.lorenaredux.model.Server;
 import dev.altairac.lorenaredux.service.ConversionService;
 import dev.altairac.lorenaredux.service.ServerService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static dev.altairac.lorenaredux.enums.ChannelType.LORE;
 import static dev.altairac.lorenaredux.enums.ChannelType.SUGGESTIONS;
@@ -47,7 +49,7 @@ public class SlashCommandsListener extends ListenerAdapter {
         SlashCommand slashCommand = Arrays.stream(SlashCommand.values())
                 .filter(cmd -> cmd.getName().equals(event.getName()))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow();
 
 
         switch (slashCommand) {
@@ -71,9 +73,10 @@ public class SlashCommandsListener extends ListenerAdapter {
     }
 
     private void handleUnitConversion(SlashCommandInteractionEvent event) {
-        String result = conversionService.convert(event.getOption("value").getAsString(),
-                event.getOption("unit").getAsString(),
-                event.getOption("to").getAsString());
+        ConversionUnit from = ConversionUnit.match(Objects.requireNonNull(event.getOption("unit")).getAsString());
+        ConversionUnit to = ConversionUnit.match(Objects.requireNonNull(event.getOption("to")).getAsString());
+        double value = Objects.requireNonNull(event.getOption("value")).getAsDouble();
+        String result = conversionService.convert(from, to, value);
         event.getHook().sendMessage(result).setEphemeral(true).queue();
     }
 
